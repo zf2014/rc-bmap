@@ -1,7 +1,7 @@
-import Util from '../utils';
-import BMapUtil from '../utils/map';
-import OPTIONS from '../options/marker';
-import BaseOverlay from './BaseOverlay';
+import Util from "../utils";
+import BMapUtil from "../utils/map";
+import OPTIONS from "../options/marker";
+import BaseOverlay from "./BaseOverlay";
 
 const getMarkerOptions = config => ({
   offset: config.offset,
@@ -12,11 +12,11 @@ const getMarkerOptions = config => ({
   draggingCursor: config.draggingCursor,
   rotation: config.rotation,
   shadow: config.shadow,
-  title: config.title,
+  title: config.title
 });
 
 class Marker extends BaseOverlay {
-  outOfRangeOpts = ['clicking', 'raiseOnDrag', 'draggingCursor', 'shadow']
+  outOfRangeOpts = ["clicking", "raiseOnDrag", "draggingCursor", "shadow"];
 
   init(config = {}) {
     const options = getMarkerOptions(config);

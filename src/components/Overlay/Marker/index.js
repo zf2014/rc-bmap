@@ -1,8 +1,8 @@
-import BaseOverlay from '../BaseOverlay';
-import ContextMenu from '../../ContextMenu';
-import Icon from './Icon';
-import Symbol from '../Symbol';
-import { Marker as BMarker } from '../../../core';
+import BaseOverlay from "../BaseOverlay";
+import ContextMenu from "../../ContextMenu";
+import Icon from "./Icon";
+import Symbol from "../Symbol";
+import { Marker as BMarker } from "../../../core";
 
 class Marker extends BaseOverlay {
   static ContextMenu = ContextMenu;
@@ -17,7 +17,7 @@ class Marker extends BaseOverlay {
       this.config.icon = this.config.symbol;
     }
     return new BMarker(this.config, this.mapInstance);
-  }
+  };
 }
 
 export default Marker;

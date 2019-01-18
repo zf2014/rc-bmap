@@ -1,12 +1,12 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import initMap, { Util } from '../../core';
-import ContextMenu from '../ContextMenu';
-import PlaceHolder from './PlaceHolder';
+import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
+import initMap, { Util } from "../../core";
+import ContextMenu from "../ContextMenu";
+import PlaceHolder from "./PlaceHolder";
 
 const fillStyle = {
-  width: '100%',
-  height: '100%',
+  width: "100%",
+  height: "100%"
 };
 
 export default class Map extends PureComponent {
@@ -16,18 +16,18 @@ export default class Map extends PureComponent {
 
   static childContextTypes = {
     getMapInstance: PropTypes.func,
-    centralizedUpdates: PropTypes.func,
-  }
+    centralizedUpdates: PropTypes.func
+  };
 
-  config = {}
+  config = {};
 
   // 仅用作config的组件
-  configComponent = ['Point', 'PlaceHolder']
+  configComponent = ["Point", "PlaceHolder"];
 
   getChildContext() {
     return {
       getMapInstance: this.getMapInstance,
-      centralizedUpdates: this.centralizedUpdates,
+      centralizedUpdates: this.centralizedUpdates
     };
   }
 
@@ -51,12 +51,12 @@ export default class Map extends PureComponent {
   centralizedUpdates = ({ name, data }) => {
     const configName = Util.firstLowerCase(name);
     this.config[configName] = data;
-  }
+  };
 
   /**
    * 初始化地图实例
    */
-  createMapInstance = async (config) => {
+  createMapInstance = async config => {
     const { mounted, name } = this.props;
     this.map = await initMap(this.mapContainer, config);
     const mapInstance = this.map.instance;
@@ -68,39 +68,41 @@ export default class Map extends PureComponent {
         mounted(mapInstance);
       }
     });
-  }
+  };
 
   /**
    * 获得地图容器ref
    */
-  getMapContainer = (ref) => {
+  getMapContainer = ref => {
     this.mapContainer = ref;
-  }
+  };
 
   /**
    * 获得地图实例
    */
-  getMapInstance = () => this.map && this.map.instance
+  getMapInstance = () => this.map && this.map.instance;
 
   renderChildren = () => {
     const { children } = this.props;
-    return React.Children.map(children, (child) => {
-      if (this.map || (child && this.configComponent.indexOf(child.type.displayName) > -1)) {
+    return React.Children.map(children, child => {
+      if (
+        this.map ||
+        (child && this.configComponent.indexOf(child.type.displayName) > -1)
+      ) {
         return child;
       }
       return null;
     });
-  }
+  };
 
   render() {
     return (
       <div ref={this.getMapContainer} style={fillStyle}>
-        { this.renderChildren() }
+        {this.renderChildren()}
       </div>
     );
   }
 }
-
 
 Map.propTypes = {
   // 
@@ -147,5 +149,5 @@ Map.propTypes = {
   // 连续缩放
   continuousZoom: PropTypes.bool,
   // 双指操作
-  pinchToZoom: PropTypes.bool,
+  pinchToZoom: PropTypes.bool
 };

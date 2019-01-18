@@ -22,7 +22,7 @@ const BMapUtil = {
   },
   BContextMenu(subMenus = []) {
     const contextMenu = new global.BMap.ContextMenu();
-    subMenus.forEach((item) => {
+    subMenus.forEach(item => {
       contextMenu.addItem(item);
       if (item.separator) {
         contextMenu.addSeparator();
@@ -129,15 +129,19 @@ const BMapUtil = {
    * @param {*} location 定位信息[map实例/string/point]
    */
   search(keyword, location) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const local = BMapUtil.LocalSearch(location, {
         onSearchComplete(result) {
           const list = [];
-          for (let i = 0, len = result.getCurrentNumPois(); i < len - 1; i += 1) {
+          for (
+            let i = 0, len = result.getCurrentNumPois();
+            i < len - 1;
+            i += 1
+          ) {
             list.push(result.getPoi(i));
           }
           resolve(result);
-        },
+        }
       });
       local.search(keyword);
     });
@@ -149,7 +153,7 @@ const BMapUtil = {
   getCurrentPosition() {
     return new Promise((resolve, reject) => {
       const geo = BMapUtil.BGeolocation();
-      geo.getCurrentPosition((result) => {
+      geo.getCurrentPosition(result => {
         const status = geo.getStatus();
         if (status === global.BMAP_STATUS_SUCCESS) {
           resolve(result);
@@ -167,13 +171,13 @@ const BMapUtil = {
    * @param {*} to 目标坐标类型
    */
   convertPoint(points, from, to = 5) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const convert = BMapUtil.BConvertor();
       if (!Array.isArray(points)) {
         points = [points];
       }
       const pList = points.map(item => BMapUtil.BPoint({ ...item }));
-      convert.translate(pList, from, to, (result) => {
+      convert.translate(pList, from, to, result => {
         resolve(result);
       });
     });
@@ -187,13 +191,17 @@ const BMapUtil = {
   getPoint(address, city) {
     return new Promise((resolve, reject) => {
       const geo = new global.BMap.Geocoder();
-      geo.getPoint(address, (point) => {
-        if (point) {
-          resolve(point);
-        } else {
-          reject();
-        }
-      }, city);
+      geo.getPoint(
+        address,
+        point => {
+          if (point) {
+            resolve(point);
+          } else {
+            reject();
+          }
+        },
+        city
+      );
     });
   },
 
@@ -204,7 +212,7 @@ const BMapUtil = {
   getLocation(point) {
     return new Promise((resolve, reject) => {
       const geo = new global.BMap.Geocoder();
-      geo.getPoint(point, (result) => {
+      geo.getPoint(point, result => {
         if (result) {
           resolve(result);
         } else {
@@ -212,7 +220,7 @@ const BMapUtil = {
         }
       });
     });
-  },
+  }
 };
 
 export default BMapUtil;

@@ -1,5 +1,5 @@
 {
-  "name": "rc-bmap",
+  "name": "rc-bmap-for-nextjs",
   "version": "1.0.0",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
@@ -29,7 +29,7 @@
   "scripts": {
     "build": "rm -rf lib && babel src -d lib",
     "build_win": "rimraf lib && babel src -d lib",
-    "prepublish": "npm run build",
+    "prepublish": "npm run build_win",
     "pub": "npm run prepublish && npm publish"
   },
   "devDependencies": {

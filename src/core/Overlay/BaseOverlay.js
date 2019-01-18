@@ -1,9 +1,9 @@
-import Util from '../utils';
+import Util from "../utils";
 
 class BaseOverlay {
-  config = {}
+  config = {};
 
-  outOfRangeOpts = []
+  outOfRangeOpts = [];
 
   constructor(config, map) {
     this.map = map;
@@ -12,14 +12,15 @@ class BaseOverlay {
     this.processEvents(config.events);
   }
 
-  hasOutOfRangeOpts = (opts = []) => opts.some(item => this.outOfRangeOpts.indexOf(item) > -1)
+  hasOutOfRangeOpts = (opts = []) =>
+    opts.some(item => this.outOfRangeOpts.indexOf(item) > -1);
 
-  processEvents = (events) => {
+  processEvents = events => {
     Util.unbindEvents(this.instance);
     Util.bindEvents(this.instance, events);
-  }
+  };
 
-  repaint = (config) => {
+  repaint = config => {
     const diffConfig = Util.compareConfig(this.config, config) || {};
 
     if (this.hasOutOfRangeOpts(Object.keys(diffConfig))) {
@@ -33,11 +34,11 @@ class BaseOverlay {
       }
     }
     this.config = { ...this.config, ...diffConfig };
-  }
+  };
 
   destroy = () => {
     this.map.removeOverlay(this.instance);
-  }
+  };
 }
 
 export default BaseOverlay;

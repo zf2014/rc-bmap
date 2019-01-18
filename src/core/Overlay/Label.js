@@ -1,16 +1,16 @@
-import Util from '../utils';
-import BMapUtil from '../utils/map';
-import OPTIONS from '../options/label';
-import BaseOverlay from './BaseOverlay';
+import Util from "../utils";
+import BMapUtil from "../utils/map";
+import OPTIONS from "../options/label";
+import BaseOverlay from "./BaseOverlay";
 
 const getLabelOptions = config => ({
   offset: config.offset,
   position: config.position,
-  enableMassClear: config.massClear,
+  enableMassClear: config.massClear
 });
 
 class Label extends BaseOverlay {
-  outOfRangeOpts = []
+  outOfRangeOpts = [];
 
   init(config = {}) {
     if (config.position) {

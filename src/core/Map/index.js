@@ -3,10 +3,10 @@
  *
  */
 
-import Util from '../utils';
-import BMapUtil from '../utils/map';
+import Util from "../utils";
+import BMapUtil from "../utils/map";
 
-import OPTIONS from '../options/map';
+import OPTIONS from "../options/map";
 
 /**
  * 地图初始化配置项所需属性
@@ -17,33 +17,33 @@ const getMapOptions = config => ({
   mapType: config.mapType && global[config.mapType],
   enableHighResolution: config.highResolution,
   enableAutoResize: config.autoResize,
-  enableMapClick: config.mapClick,
+  enableMapClick: config.mapClick
 });
 
 /**
  * 处理地图显示中心点
  */
-const processCenter = (center) => {
+const processCenter = center => {
   if (!Util.isNil(center) && !Util.isString(center)) {
-    center = Util.convert2BPoint(center, 'center');
+    center = Util.convert2BPoint(center, "center");
   }
 
   return center;
 };
 
 class Map {
-  config = {}
+  config = {};
 
-  instance = null
+  instance = null;
 
-  requiredProperty = ['zoom', 'center']
+  requiredProperty = ["zoom", "center"];
 
   constructor(container, config) {
     const mapOptions = getMapOptions(config);
     this.instance = BMapUtil.BMap(container, mapOptions);
     this.config.center = processCenter(config.center);
     if (!config.zoom) {
-      throw Error('Missing the required property `zoom`');
+      throw Error("Missing the required property `zoom`");
     }
     this.instance.centerAndZoom(this.config.center, config.zoom);
   }
@@ -51,7 +51,7 @@ class Map {
   /**
    * 设置右键菜单
    */
-  processContextMenu = (contextMenu) => {
+  processContextMenu = contextMenu => {
     if (this.contextMenu) {
       this.instance.removeContextMenu(this.contextMenu);
     }
@@ -59,41 +59,42 @@ class Map {
     if (contextMenu) {
       this.instance.addContextMenu(contextMenu);
     }
-  }
+  };
 
   /**
    * 设置地图类型
    */
-  setMapType = (mapType) => {
+  setMapType = mapType => {
     if (mapType && global[mapType]) {
       this.instance.setMapType(global[mapType]);
     }
-  }
+  };
 
   /**
    * 处理地图相关事件
    * 绑定之前先统一解绑
    */
-  processEvents = (events) => {
+  processEvents = events => {
     Util.unbindEvents(this.instance);
     Util.bindEvents(this.instance, events);
-  }
+  };
 
   /**
    * 处理可以通过 setXXX 以及 enable、disableXXX 的方法
    */
-  processOptions = (config) => {
+  processOptions = config => {
     Util.processSetOptions(this.instance, OPTIONS.SET, config);
     Util.processBooleanOptions(this.instance, OPTIONS.BOOLEAN, config);
-  }
+  };
 
   /**
    * 重绘
    */
-  repaint = (config) => {
+  repaint = config => {
     // 先进行一步转换，因为this.config.center为转换后的值，防止diff出现 bad case
     if (config.center) {
       config.center = processCenter(config.center);
+      this.instance.centerAndZoom(config.center, config.zoom);
     }
     const diffConfig = Util.compareConfig(this.config, config);
 
@@ -104,9 +105,9 @@ class Map {
     this.processOptions(diffConfig);
     this.config = {
       ...this.config,
-      ...diffConfig,
+      ...diffConfig
     };
-  }
+  };
 }
 
 export default Map;

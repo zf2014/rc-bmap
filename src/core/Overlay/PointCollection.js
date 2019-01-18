@@ -1,15 +1,16 @@
-import Util from '../utils';
-import BMapUtil from '../utils/map';
+import Util from "../utils";
+import BMapUtil from "../utils/map";
 
-import BaseOverlay from './BaseOverlay';
+import BaseOverlay from "./BaseOverlay";
 
 const getPointCollectionOptions = config => ({
   shape: config.shape ? global[config.shape] : null,
   size: config.size ? global[config.size] : null,
-  color: config.color,
+  color: config.color
 });
 
-const processPoints = (points = []) => points.map(item => Util.convert2BPoint(item));
+const processPoints = (points = []) =>
+  points.map(item => Util.convert2BPoint(item));
 
 class PointCollection extends BaseOverlay {
   init(config = {}) {
@@ -24,7 +25,7 @@ class PointCollection extends BaseOverlay {
       this.instance.setStyles({
         shape: config.shape ? global[config.shape] : global[this.config.shape],
         size: config.shape ? global[config.size] : global[this.config.size],
-        color: config.color || this.config.color,
+        color: config.color || this.config.color
       });
     }
 

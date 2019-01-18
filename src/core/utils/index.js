@@ -1,5 +1,5 @@
-import isEqual from 'lodash.isequal';
-import BMapUtil from './map';
+import isEqual from "lodash.isequal";
+import BMapUtil from "./map";
 
 /**
  * 是否为Point
@@ -47,7 +47,7 @@ const isNil = obj => obj === undefined || obj === null;
  * 是否为字符串
  * @param {*} str
  */
-const isString = str => typeof str === 'string';
+const isString = str => typeof str === "string";
 
 /**
  * 首字母转为大写
@@ -65,43 +65,46 @@ const firstLowerCase = str => str.replace(/^\S/, s => s.toLowerCase());
  * 获取行政区包含点集合
  * @param {*} name 行政区名称
  */
-const getBoundary = name => new Promise((resolve, reject) => {
-  const boundary = new global.BMap.Boundary();
+const getBoundary = name =>
+  new Promise((resolve, reject) => {
+    const boundary = new global.BMap.Boundary();
 
-  boundary.get(name, (res) => {
-    const count = res.boundaries.length;
-    if (count === 0) {
-      reject();
-    }
-    const area = [];
-    let allPoints = [];
-    for (let i = 0; i < count; i += 1) {
-      const arr = res.boundaries[i].split(';').map((item) => {
-        const pointArr = item.split(',');
-        return BMapUtil.BPoint({ lng: pointArr[0], lat: pointArr[1].trim() });
+    boundary.get(name, res => {
+      const count = res.boundaries.length;
+      if (count === 0) {
+        reject();
+      }
+      const area = [];
+      let allPoints = [];
+      for (let i = 0; i < count; i += 1) {
+        const arr = res.boundaries[i].split(";").map(item => {
+          const pointArr = item.split(",");
+          return BMapUtil.BPoint({ lng: pointArr[0], lat: pointArr[1].trim() });
+        });
+        allPoints = allPoints.concat(arr);
+        area.push(arr);
+      }
+
+      resolve({
+        area,
+        points: allPoints
       });
-      allPoints = allPoints.concat(arr);
-      area.push(arr);
-    }
-
-    resolve({
-      area,
-      points: allPoints,
     });
   });
-});
 
 /**
  * 将传入值转换为 BMap.Point
  * @param {*} point 点对象 { lng, lat }
  * @param {*} propsName 用于错误提示
  */
-const convert2BPoint = (point, propsName = 'point') => {
+const convert2BPoint = (point, propsName = "point") => {
   if (isNil(point)) {
     throw Error(`Missing property \`${propsName}\``);
   }
   if (!isPoint(point)) {
-    throw Error(`The \`${propsName}\` property should be a literal value \`{ lng, lat }\``);
+    throw Error(
+      `The \`${propsName}\` property should be a literal value \`{ lng, lat }\``
+    );
   } else if (!isBPoint(point)) {
     point = BMapUtil.BPoint({ ...point });
   }
@@ -113,12 +116,14 @@ const convert2BPoint = (point, propsName = 'point') => {
  * @param {*} point 矩形尺寸 { width, height }
  * @param {*} propsName 用于错误提示
  */
-const convert2BSize = (size, propsName = 'size') => {
+const convert2BSize = (size, propsName = "size") => {
   if (isNil(size)) {
     throw Error(`Missing property \`${propsName}\``);
   }
   if (!isSize(size)) {
-    throw Error(`The \`${propsName}\` property should be a literal value \`{ width, height }\``);
+    throw Error(
+      `The \`${propsName}\` property should be a literal value \`{ width, height }\``
+    );
   }
   if (!isBSize(size)) {
     size = BMapUtil.BSize({ ...size });
@@ -131,12 +136,14 @@ const convert2BSize = (size, propsName = 'size') => {
  * @param {*} point 矩形区域 { sw, ne }
  * @param {*} propsName 用于错误提示
  */
-const convert2BBounds = (bounds, propsName = 'bounds') => {
+const convert2BBounds = (bounds, propsName = "bounds") => {
   if (isNil(bounds)) {
     throw Error(`Missing property \`${propsName}\``);
   }
   if (!isBounds(bounds)) {
-    throw Error(`The \`${propsName}\` property should be a literal value \`{ width, height }\``);
+    throw Error(
+      `The \`${propsName}\` property should be a literal value \`{ width, height }\``
+    );
   }
   if (!isBBounds(bounds)) {
     bounds = BMapUtil.BBounds({ ...bounds });
@@ -150,7 +157,7 @@ const convert2BBounds = (bounds, propsName = 'bounds') => {
  * @param {*} events 事件集合
  */
 const bindEvents = (target, events = {}) => {
-  Object.keys(events).forEach((eventName) => {
+  Object.keys(events).forEach(eventName => {
     const callback = (...args) => {
       events[eventName].call(null, ...args);
     };
@@ -164,9 +171,9 @@ const bindEvents = (target, events = {}) => {
  * 将目标对象中已绑定事件移除
  * @param {*} target
  */
-const unbindEvents = (target) => {
+const unbindEvents = target => {
   const { events = {} } = target;
-  Object.keys(events).forEach((eventName) => {
+  Object.keys(events).forEach(eventName => {
     const event = events[eventName];
     target.removeEventListener(eventName, event);
   });
@@ -180,8 +187,8 @@ const unbindEvents = (target) => {
  * @param {*} values 值集合
  */
 const processSetOptions = (target, options, values) => {
-  options.forEach((key) => {
-    if (values[key] || typeof values[key] === 'boolean') {
+  options.forEach(key => {
+    if (values[key] || typeof values[key] === "boolean") {
       const upKey = firstUpperCase(key);
       if (target[`set${upKey}`]) {
         target[`set${upKey}`](values[key]);
@@ -197,10 +204,10 @@ const processSetOptions = (target, options, values) => {
  * @param {*} values 值集合
  */
 const processBooleanOptions = (target, options, values) => {
-  options.forEach((key) => {
-    if (values[key] || typeof values[key] === 'boolean') {
+  options.forEach(key => {
+    if (values[key] || typeof values[key] === "boolean") {
       const upKey = firstUpperCase(key);
-      const prefix = values[key] ? 'enable' : 'disable';
+      const prefix = values[key] ? "enable" : "disable";
       if (target[`${prefix}${upKey}`]) {
         target[`${prefix}${upKey}`]();
       }
@@ -237,7 +244,7 @@ const convertControlOptions = ({ anchor, offset }) => {
   }
 
   if (offset) {
-    result.offset = convert2BSize(offset, 'offset');
+    result.offset = convert2BSize(offset, "offset");
   }
   return result;
 };
@@ -253,7 +260,6 @@ const processControlVisible = (target, visible) => {
   }
   return null;
 };
-
 
 export default {
   isPoint,
@@ -275,5 +281,5 @@ export default {
   compareConfig,
   firstLowerCase,
   convertControlOptions,
-  processControlVisible,
+  processControlVisible
 };

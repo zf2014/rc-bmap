@@ -1,7 +1,8 @@
-import { Component } from 'react';
-import { Size, Icon, ContextMenu, Point } from './base/common';
+import { Component } from "react";
+import { Size, Icon, ContextMenu, Point } from "./base/common";
 
 export declare class Marker extends Component<any> {
+  static Icon: any;
   /**
    * 控件的水平偏移值
    */
